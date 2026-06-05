@@ -1,3 +1,4 @@
+```javascript
 import { auth, db, provider } from "./firebase.js";
 
 import {
@@ -17,7 +18,12 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 window.login = async () => {
-  await signInWithPopup(auth, provider);
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (erro) {
+    console.error(erro);
+    alert("Erro no login: " + erro.message);
+  }
 };
 
 window.logout = async () => {
@@ -26,75 +32,113 @@ window.logout = async () => {
 
 window.salvar = async () => {
 
-  const valor =
-    parseFloat(document.getElementById("valor").value) || 0;
+  try {
 
-  const percentual =
-    parseFloat(document.getElementById("percentual").value) || 0;
+    const valor =
+      parseFloat(document.getElementById("valor").value) || 0;
 
-  const guardado = valor * percentual / 100;
+    const percentual =
+      parseFloat(document.getElementById("percentual").value) || 0;
 
-  const usuario = auth.currentUser;
+    const guardado = valor * percentual / 100;
 
-  await addDoc(collection(db, "depositos"), {
-    uid: usuario.uid,
-    nome: usuario.displayName,
-    valor,
-    percentual,
-    guardado,
-    data: new Date()
-  });
+    const usuario = auth.currentUser;
 
-  carregar();
+    if (!usuario) {
+      alert("Faça login primeiro.");
+      return;
+    }
+
+    await addDoc(collection(db, "depositos"), {
+      uid: usuario.uid,
+      nome: usuario.displayName,
+      valor,
+      percentual,
+      guardado,
+      data: new Date()
+    });
+
+    alert("Depósito salvo com sucesso!");
+
+    document.getElementById("valor").value = "";
+
+    carregar();
+
+  } catch (erro) {
+
+    console.error(erro);
+    alert("Erro ao salvar: " + erro.message);
+
+  }
 };
 
 window.excluir = async (id) => {
-  await deleteDoc(doc(db, "depositos", id));
-  carregar();
+
+  try {
+
+    await deleteDoc(doc(db, "depositos", id));
+
+    carregar();
+
+  } catch (erro) {
+
+    console.error(erro);
+    alert("Erro ao excluir: " + erro.message);
+
+  }
 };
 
 async function carregar() {
 
-  const usuario = auth.currentUser;
+  try {
 
-  if (!usuario) return;
+    const usuario = auth.currentUser;
 
-  const tabela =
-    document.getElementById("historico");
+    if (!usuario) return;
 
-  tabela.innerHTML = "";
+    const tabela =
+      document.getElementById("historico");
 
-  let total = 0;
+    tabela.innerHTML = "";
 
-  const q = query(
-    collection(db, "depositos"),
-    where("uid", "==", usuario.uid)
-  );
+    let total = 0;
 
-  const snap = await getDocs(q);
+    const q = query(
+      collection(db, "depositos"),
+      where("uid", "==", usuario.uid)
+    );
 
-  snap.forEach((item) => {
+    const snap = await getDocs(q);
 
-    const dado = item.data();
+    snap.forEach((item) => {
 
-    total += dado.guardado;
+      const dado = item.data();
 
-    tabela.innerHTML += `
-      <tr>
-        <td>R$ ${dado.valor.toFixed(2)}</td>
-        <td>${dado.percentual}%</td>
-        <td>R$ ${dado.guardado.toFixed(2)}</td>
-        <td>
-          <button onclick="excluir('${item.id}')">
-            Excluir
-          </button>
-        </td>
-      </tr>
-    `;
-  });
+      total += Number(dado.guardado || 0);
 
-  document.getElementById("total")
-    .innerText = "R$ " + total.toFixed(2);
+      tabela.innerHTML += `
+        <tr>
+          <td>R$ ${Number(dado.valor).toFixed(2)}</td>
+          <td>${dado.percentual}%</td>
+          <td>R$ ${Number(dado.guardado).toFixed(2)}</td>
+          <td>
+            <button onclick="excluir('${item.id}')">
+              Excluir
+            </button>
+          </td>
+        </tr>
+      `;
+    });
+
+    document.getElementById("total")
+      .innerText = "R$ " + total.toFixed(2);
+
+  } catch (erro) {
+
+    console.error(erro);
+    alert("Erro ao carregar: " + erro.message);
+
+  }
 }
 
 onAuthStateChanged(auth, (user) => {
@@ -103,7 +147,8 @@ onAuthStateChanged(auth, (user) => {
 
     document.getElementById("usuario").innerHTML =
       `
-      <h3>${user.displayName}</h3>
+      <h3>Olá, ${user.displayName}</h3>
+
       <button onclick="logout()">
         Sair
       </button>
@@ -121,3 +166,4 @@ onAuthStateChanged(auth, (user) => {
       `;
   }
 });
+```
