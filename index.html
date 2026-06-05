@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Cofrinho do Trevisol</title>
 
 <link rel="stylesheet" href="style.css">
@@ -15,6 +17,8 @@
     <h1>💰 Cofrinho do Trevisol</h1>
 
     <div id="usuario"></div>
+
+    <!-- DEPÓSITO -->
 
     <div class="card">
 
@@ -37,6 +41,8 @@
 
     </div>
 
+    <!-- TOTAL -->
+
     <div class="saldo">
 
         <h2>Total Guardado</h2>
@@ -46,6 +52,81 @@
         </h1>
 
     </div>
+
+    <!-- META FINANCEIRA -->
+
+    <div class="card">
+
+        <h2>🎯 Meta Financeira</h2>
+
+        <input
+            id="meta"
+            type="number"
+            placeholder="Digite sua meta"
+        >
+
+        <button onclick="salvarMeta()">
+            Salvar Meta
+        </button>
+
+        <br><br>
+
+        <div class="progress">
+
+            <div
+                class="progress-bar"
+                id="barra"
+            ></div>
+
+        </div>
+
+        <h3 id="percentualMeta">
+            0%
+        </h3>
+
+    </div>
+
+    <!-- DASHBOARD -->
+
+    <div class="card">
+
+        <h2>📊 Dashboard Financeiro</h2>
+
+        <div class="dashboard">
+
+            <div class="item">
+                <h3>Total Guardado</h3>
+                <span id="dashTotal">
+                    R$ 0,00
+                </span>
+            </div>
+
+            <div class="item">
+                <h3>Maior Depósito</h3>
+                <span id="dashMaior">
+                    R$ 0,00
+                </span>
+            </div>
+
+            <div class="item">
+                <h3>Depósitos</h3>
+                <span id="dashQtd">
+                    0
+                </span>
+            </div>
+
+            <div class="item">
+                <h3>Média</h3>
+                <span id="dashMedia">
+                    R$ 0,00
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- HISTÓRICO -->
 
     <table>
 
