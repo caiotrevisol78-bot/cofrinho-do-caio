@@ -165,3 +165,33 @@ onAuthStateChanged(auth, (user) => {
       `;
   }
 });
+// META
+
+async function atualizarMeta(total) {
+
+  const meta =
+    Number(localStorage.getItem("meta")) || 0;
+
+  if (meta <= 0) return;
+
+  const percentual =
+    Math.min((total / meta) * 100, 100);
+
+  document.getElementById("barra").style.width =
+    percentual + "%";
+
+  document.getElementById("percentualMeta").innerText =
+    percentual.toFixed(1) + "% da meta";
+}
+
+window.salvarMeta = () => {
+
+  const meta =
+    Number(document.getElementById("meta").value);
+
+  if (!meta) return;
+
+  localStorage.setItem("meta", meta);
+
+  carregar();
+};
