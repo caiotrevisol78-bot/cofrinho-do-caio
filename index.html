@@ -1,141 +1,121 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cofrinho do Trevisol</title>
 
-<title>Cofrinho do Trevisol</title>
+    <link rel="stylesheet" href="style.css">
 
-<link rel="stylesheet" href="style.css">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1e88e5">
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e88e5">
 
+    <!-- Ícone -->
+    <link rel="icon" type="image/png" href="icon-192.png">
 </head>
+
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h1>💰 Cofrinho do Trevisol</h1>
+        <h1>💰 Cofrinho do Trevisol</h1>
 
-    <div id="usuario"></div>
+        <div id="usuario"></div>
 
-    <!-- NOVO DEPÓSITO -->
+        <div class="card">
 
-    <div class="card">
+            <input
+                id="valor"
+                type="number"
+                placeholder="Valor recebido"
+            >
 
-        <h2>Novo Depósito</h2>
+            <input
+                id="percentual"
+                type="number"
+                value="40"
+                placeholder="% para guardar"
+            >
 
-        <input
-            id="valor"
-            type="number"
-            placeholder="Valor recebido"
-        >
-
-        <input
-            id="percentual"
-            type="number"
-            value="40"
-            placeholder="% para guardar"
-        >
-
-        <button onclick="salvar()">
-            Salvar Depósito
-        </button>
-
-    </div>
-
-    <!-- TOTAL -->
-
-    <div class="saldo">
-
-        <h2>Total Guardado</h2>
-
-        <h1 id="total">
-            R$ 0,00
-        </h1>
-
-    </div>
-
-    <!-- META FINANCEIRA -->
-
-    <div class="card">
-
-        <h2>🎯 Meta Financeira</h2>
-
-        <input
-            id="meta"
-            type="number"
-            placeholder="Digite sua meta"
-        >
-
-        <button onclick="salvarMeta()">
-            Salvar Meta
-        </button>
-
-        <br><br>
-
-        <div class="progress">
-
-            <div
-                class="progress-bar"
-                id="barra"
-            ></div>
+            <button onclick="salvar()">
+                Salvar Depósito
+            </button>
 
         </div>
 
-        <h3 id="percentualMeta">
-            Meta não definida
-        </h3>
+        <!-- META -->
+        <div class="card">
 
-    </div>
+            <h2>Meta Financeira</h2>
 
-    <!-- DASHBOARD -->
+            <input
+                id="meta"
+                type="number"
+                placeholder="Defina sua meta"
+            >
 
-    <div class="card">
+            <button onclick="salvarMeta()">
+                Salvar Meta
+            </button>
 
-        <h2>📊 Dashboard Financeiro</h2>
+            <br><br>
 
-        <div class="dashboard">
-
-            <div class="item">
-                <h3>Total Guardado</h3>
-                <span id="dashTotal">
-                    R$ 0,00
-                </span>
+            <div class="progress">
+                <div
+                    class="progress-bar"
+                    id="barra">
+                </div>
             </div>
 
-            <div class="item">
-                <h3>Maior Depósito</h3>
-                <span id="dashMaior">
-                    R$ 0,00
-                </span>
-            </div>
+            <h3 id="percentualMeta">
+                0%
+            </h3>
 
-            <div class="item">
-                <h3>Depósitos</h3>
-                <span id="dashQtd">
-                    0
-                </span>
-            </div>
+        </div>
 
-            <div class="item">
-                <h3>Média</h3>
-                <span id="dashMedia">
-                    R$ 0,00
-                </span>
+        <!-- DASHBOARD -->
+        <div class="card">
+
+            <h2>Dashboard</h2>
+
+            <div class="dashboard">
+
+                <div class="item">
+                    <h3>Total Guardado</h3>
+                    <span id="dashTotal">R$ 0,00</span>
+                </div>
+
+                <div class="item">
+                    <h3>Maior Depósito</h3>
+                    <span id="dashMaior">R$ 0,00</span>
+                </div>
+
+                <div class="item">
+                    <h3>Depósitos</h3>
+                    <span id="dashQtd">0</span>
+                </div>
+
+                <div class="item">
+                    <h3>Média</h3>
+                    <span id="dashMedia">R$ 0,00</span>
+                </div>
+
             </div>
 
         </div>
 
-    </div>
+        <div class="saldo">
 
-    <!-- HISTÓRICO -->
+            <h2>Total Guardado</h2>
 
-    <div class="card">
+            <h1 id="total">
+                R$ 0,00
+            </h1>
 
-        <h2>📋 Histórico</h2>
+        </div>
 
         <table>
 
@@ -156,16 +136,14 @@
 
     </div>
 
-</div>
+    <script type="module" src="app.js"></script>
 
-<script type="module" src="app.js"></script>
-
-<script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./sw.js");
-}
-</script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js');
+        }
+    </script>
 
 </body>
+
 </html>
-```
