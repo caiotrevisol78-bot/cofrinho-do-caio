@@ -1,3 +1,4 @@
+```javascript
 import { auth, db, provider } from "./firebase.js";
 
 import {
@@ -16,6 +17,8 @@ import {
   doc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// LOGIN
+
 window.login = async () => {
   try {
     await signInWithPopup(auth, provider);
@@ -28,6 +31,8 @@ window.login = async () => {
 window.logout = async () => {
   await signOut(auth);
 };
+
+// SALVAR DEPÓSITO
 
 window.salvar = async () => {
 
@@ -57,8 +62,6 @@ window.salvar = async () => {
       data: new Date()
     });
 
-    alert("Depósito salvo com sucesso!");
-
     document.getElementById("valor").value = "";
 
     carregar();
@@ -70,6 +73,8 @@ window.salvar = async () => {
 
   }
 };
+
+// EXCLUIR
 
 window.excluir = async (id) => {
 
@@ -87,6 +92,51 @@ window.excluir = async (id) => {
   }
 };
 
+// META
+
+window.salvarMeta = () => {
+
+  const meta =
+    Number(document.getElementById("meta")?.value || 0);
+
+  if (!meta) return;
+
+  localStorage.setItem("metaTrevisol", meta);
+
+  carregar();
+};
+
+function atualizarMeta(total) {
+
+  const barra =
+    document.getElementById("barra");
+
+  const percentualMeta =
+    document.getElementById("percentualMeta");
+
+  if (!barra || !percentualMeta) return;
+
+  const meta =
+    Number(localStorage.getItem("metaTrevisol")) || 0;
+
+  if (meta <= 0) {
+    barra.style.width = "0%";
+    percentualMeta.innerText = "Meta não definida";
+    return;
+  }
+
+  const percentual =
+    Math.min((total / meta) * 100, 100);
+
+  barra.style.width =
+    percentual + "%";
+
+  percentualMeta.innerText =
+    percentual.toFixed(1) + "% da meta";
+}
+
+// CARREGAR DADOS
+
 async function carregar() {
 
   try {
@@ -101,6 +151,8 @@ async function carregar() {
     tabela.innerHTML = "";
 
     let total = 0;
+    let maior = 0;
+    let quantidade = 0;
 
     const q = query(
       collection(db, "depositos"),
@@ -114,6 +166,12 @@ async function carregar() {
       const dado = item.data();
 
       total += Number(dado.guardado || 0);
+
+      if (Number(dado.guardado || 0) > maior) {
+        maior = Number(dado.guardado || 0);
+      }
+
+      quantidade++;
 
       tabela.innerHTML += `
         <tr>
@@ -129,8 +187,44 @@ async function carregar() {
       `;
     });
 
-    document.getElementById("total")
-      .innerText = "R$ " + total.toFixed(2);
+    document.getElementById("total").innerText =
+      "R$ " + total.toFixed(2);
+
+    // DASHBOARD
+
+    const dashTotal =
+      document.getElementById("dashTotal");
+
+    const dashMaior =
+      document.getElementById("dashMaior");
+
+    const dashQtd =
+      document.getElementById("dashQtd");
+
+    const dashMedia =
+      document.getElementById("dashMedia");
+
+    if (dashTotal)
+      dashTotal.innerText =
+        "R$ " + total.toFixed(2);
+
+    if (dashMaior)
+      dashMaior.innerText =
+        "R$ " + maior.toFixed(2);
+
+    if (dashQtd)
+      dashQtd.innerText =
+        quantidade;
+
+    if (dashMedia)
+      dashMedia.innerText =
+        "R$ " +
+        (quantidade > 0
+          ? total / quantidade
+          : 0
+        ).toFixed(2);
+
+    atualizarMeta(total);
 
   } catch (erro) {
 
@@ -139,6 +233,8 @@ async function carregar() {
 
   }
 }
+
+// LOGIN AUTOMÁTICO
 
 onAuthStateChanged(auth, (user) => {
 
@@ -165,33 +261,4 @@ onAuthStateChanged(auth, (user) => {
       `;
   }
 });
-// META
-
-async function atualizarMeta(total) {
-
-  const meta =
-    Number(localStorage.getItem("meta")) || 0;
-
-  if (meta <= 0) return;
-
-  const percentual =
-    Math.min((total / meta) * 100, 100);
-
-  document.getElementById("barra").style.width =
-    percentual + "%";
-
-  document.getElementById("percentualMeta").innerText =
-    percentual.toFixed(1) + "% da meta";
-}
-
-window.salvarMeta = () => {
-
-  const meta =
-    Number(document.getElementById("meta").value);
-
-  if (!meta) return;
-
-  localStorage.setItem("meta", meta);
-
-  carregar();
-};
+```
