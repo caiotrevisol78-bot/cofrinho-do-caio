@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -8,6 +9,8 @@
 <title>Cofrinho do Trevisol</title>
 
 <link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1e88e5">
 
 </head>
 <body>
@@ -18,9 +21,11 @@
 
     <div id="usuario"></div>
 
-    <!-- DEPÓSITO -->
+    <!-- NOVO DEPÓSITO -->
 
     <div class="card">
+
+        <h2>Novo Depósito</h2>
 
         <input
             id="valor"
@@ -81,7 +86,7 @@
         </div>
 
         <h3 id="percentualMeta">
-            0%
+            Meta não definida
         </h3>
 
     </div>
@@ -128,26 +133,39 @@
 
     <!-- HISTÓRICO -->
 
-    <table>
+    <div class="card">
 
-        <thead>
+        <h2>📋 Histórico</h2>
 
-            <tr>
-                <th>Valor</th>
-                <th>%</th>
-                <th>Guardado</th>
-                <th>Ação</th>
-            </tr>
+        <table>
 
-        </thead>
+            <thead>
 
-        <tbody id="historico"></tbody>
+                <tr>
+                    <th>Valor</th>
+                    <th>%</th>
+                    <th>Guardado</th>
+                    <th>Ação</th>
+                </tr>
 
-    </table>
+            </thead>
+
+            <tbody id="historico"></tbody>
+
+        </table>
+
+    </div>
 
 </div>
 
 <script type="module" src="app.js"></script>
 
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js");
+}
+</script>
+
 </body>
 </html>
+```
