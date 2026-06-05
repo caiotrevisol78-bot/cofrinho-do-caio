@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cofrinho do Caio</title>
+<style>
+body{background:#0f1115;color:#fff;font-family:Arial;padding:20px}
+.card{max-width:900px;margin:auto;background:#1b1f27;padding:20px;border-radius:20px}
+input{width:100%;padding:12px;margin:6px 0;background:#2a2f3a;color:#fff;border:1px solid #444;border-radius:10px;box-sizing:border-box}
+button{padding:10px;border:none;border-radius:10px;color:#fff;font-weight:bold;cursor:pointer}
+.salvar{width:100%;background:#16a34a}
+.del{background:#dc2626}
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{border:1px solid #444;padding:8px;text-align:center}
+th{background:#222}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>🏦 Cofrinho do Caio</h1>
+
+<input id="data" placeholder="Data">
+<input id="valor" type="number" placeholder="Valor recebido">
+<input id="perc" type="number" value="40" placeholder="% para guardar">
+
+<button class="salvar" onclick="salvar()">Salvar Registro</button>
+
+<h3 id="resultado">Nenhum registro.</h3>
+<h2>Total Acumulado: <span id="total">R$ 0,00</span></h2>
+
+<table>
+<thead>
+<tr><th>Data</th><th>Valor</th><th>%</th><th>Guardado</th><th>Ação</th></tr>
+</thead>
+<tbody id="hist"></tbody>
+</table>
+</div>
+
+<script>
+let dados = JSON.parse(localStorage.getItem('cofrinho_caio') || '[]');
+
+function salvar(){
+ const data=document.getElementById('data').value;
+ const valor=parseFloat(document.getElementById('valor').value)||0;
+ const perc=parseFloat(document.getElementById('perc').value)||0;
+
+ const guardado=valor*perc/100;
+
+ dados.push({data,valor,perc,guardado});
+ localStorage.setItem('cofrinho_caio', JSON.stringify(dados));
+
+ document.getElementById('resultado').innerHTML='Guardado: R$ '+guardado.toFixed(2);
+ carregar();
+}
+
+function excluir(i){
+ dados.splice(i,1);
+ localStorage.setItem('cofrinho_caio', JSON.stringify(dados));
+ carregar();
+}
+
+function carregar(){
+ let html='';
+ let total=0;
+
+ dados = JSON.parse(localStorage.getItem('cofrinho_caio') || '[]');
+
+ dados.forEach((r,i)=>{
+   total += r.guardado;
+   html += `<tr>
+   <td>${r.data}</td>
+   <td>R$ ${r.valor.toFixed(2)}</td>
+   <td>${r.perc}%</td>
+   <td>R$ ${r.guardado.toFixed(2)}</td>
+   <td><button class="del" onclick="excluir(${i})">🗑️</button></td>
+   </tr>`;
+ });
+
+ document.getElementById('hist').innerHTML=html;
+ document.getElementById('total').innerHTML='R$ '+total.toFixed(2);
+}
+
+carregar();
+</script>
+</body>
+</html>
